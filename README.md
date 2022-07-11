@@ -53,8 +53,28 @@ use({
 })
 ```
 
-Then, you can map your own. Any key/value you pass into the second parameter of
-`diagnostic_textobj` is passed to
+Then, you can map your own. For example, to change the keymapping to `id`:
+
+```lua
+local td = require("textobj-diagnostic")
+
+vim.keymap.set(
+    "x",
+    "id",
+    ":<C-U>lua _G.diagnostic_textobj()<CR>",
+    { silent = true }
+)
+
+vim.keymap.set(
+    "o",
+    "id",
+    ":<C-U>lua _G.diagnostic_textobj()<CR>",
+    { silent = true }
+)
+```
+
+Any key/value you pass into the second parameter of `diagnostic_textobj` is
+passed to
 [`vim.diagnostic.get`](https://neovim.io/doc/user/diagnostic.html#vim.diagnostic.get\(\)),
 which means it can be used to control the namespace or severity of the errors
 being selected. For example:
