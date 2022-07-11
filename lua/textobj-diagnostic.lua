@@ -16,8 +16,18 @@ _G.diagnostic_textobj = function(local_opts)
 
     for _, v in pairs(diagnostics) do
         if
-            (closest_so_far == nil or v.lnum + 1 < closest_so_far.lnum + 1)
-            and v.lnum + 1 >= current_line
+            (
+                closest_so_far == nil
+                or (v.lnum + 1 < closest_so_far.lnum + 1)
+                or (
+                    (v.lnum + 1 == closest_so_far.lnum + 1)
+                    and (v.col + 1 < closest_so_far.col + 1)
+                )
+            )
+            and (
+                v.lnum + 1 > current_line
+                or (v.lnum + 1 == current_line and v.end_col >= current_column)
+            )
         then
             closest_so_far = v
         end
