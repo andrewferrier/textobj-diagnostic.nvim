@@ -12,7 +12,7 @@ delete the highlighted text, and enter insert mode.
 
 This is a standard NeoVim plugin.
 
-Example for `packer.nvim`:
+Example for [`packer.nvim`](https://github.com/wbthomason/packer.nvim):
 
 ```lua
 packer.startup(function(use)
