@@ -68,8 +68,6 @@ why](https://github.com/andrewferrier/textobj-diagnostic.nvim/issues/4)). For ex
 diagnostic item under the cursor (or the next one) of `id`:
 
 ```lua
-local td = require("textobj-diagnostic")
-
 vim.keymap.set(
     { "x", "o" },
     "id",
@@ -82,8 +80,6 @@ To map to the next diagnostic item after the cursor (excluding where the cursor
 is):
 
 ```lua
-local td = require("textobj-diagnostic")
-
 vim.keymap.set(
     { "x", "o" },
     "]d",
@@ -99,8 +95,6 @@ which means it can be used to control the namespace or severity of the errors
 being selected. For example:
 
 ```lua
-local td = require("textobj-diagnostic")
-
 vim.keymap.set(
     { "x", "o" },
     "ig",
