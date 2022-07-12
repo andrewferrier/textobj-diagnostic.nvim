@@ -59,7 +59,8 @@ use({
 })
 ```
 
-Then, you can map your own. For example, to create a keymapping for the
+Then, you can map your own. (**IMPORTANT NOTE**: For now, this has to be done as Lua embedded in VimL. [I'm investigating
+why](https://github.com/andrewferrier/textobj-diagnostic.nvim/issues/4)). For example, to create a keymapping for the
 diagnostic item under the cursor (or the next one) of `id`:
 
 ```lua
