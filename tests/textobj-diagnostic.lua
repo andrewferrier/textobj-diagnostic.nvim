@@ -1,9 +1,23 @@
+-- nvim_buf_get_mark: rows 1-indexed, cols 0-indexed
+-- vim.diagnostic.get/set: rows 0-indexed, cols 0-indexed
+-- vim.api.nvim_win_set_cursor: rows 1-indexed, cols 0-indexed
+
 local set_lines = function(lines)
     vim.api.nvim_buf_set_lines(0, 0, -1, false, lines)
 end
 
 local check_lines = function(lines)
     assert.are.same(lines, vim.api.nvim_buf_get_lines(0, 0, -1, false))
+end
+
+local check_visual = function(row1, col1, row2, col2)
+    assert.are.same({ row1, col1 }, vim.api.nvim_buf_get_mark(0, "<"))
+    assert.are.same({ row2, col2 }, vim.api.nvim_buf_get_mark(0, ">"))
+end
+
+local feedkeys = function(keys)
+    keys = vim.api.nvim_replace_termcodes(keys, true, false, true)
+    vim.api.nvim_feedkeys(keys, "mtx", false)
 end
 
 local TEST_NAMESPACE = 1
@@ -43,7 +57,6 @@ describe("out-of-the-box keymappings", function()
         })
     end)
 
-    it("can change simple diagnostic", function()
     it("can change diagnostic", function()
         vim.api.nvim_win_set_cursor(0, { 1, 0 })
         vim.cmd("normal cighello")
@@ -68,6 +81,18 @@ describe("out-of-the-box keymappings", function()
         })
     end)
 
+    it("can visually select diagnostic", function()
+        vim.api.nvim_win_set_cursor(0, { 1, 0 })
+        feedkeys("vigv")
+        check_visual(2, 0, 2, 4)
+    end)
+
+    it("can visually select diagnostic when sitting on it", function()
+        vim.api.nvim_win_set_cursor(0, { 2, 0 })
+        feedkeys("vigv")
+        check_visual(2, 0, 2, 4)
+    end)
+
     it("can delete diagnostic when sitting on it", function()
         vim.api.nvim_win_set_cursor(0, { 2, 0 })
         vim.cmd("normal dig")
@@ -90,6 +115,12 @@ describe("out-of-the-box keymappings", function()
             "test4",
             "test5",
         })
+    end)
+
+    it("can visually select next diagnostic when sitting on another", function()
+        vim.api.nvim_win_set_cursor(0, { 2, 0 })
+        feedkeys("v]gv")
+        check_visual(3, 0, 3, 4)
     end)
 
     it("can delete prev diagnostic when sitting on another", function()
