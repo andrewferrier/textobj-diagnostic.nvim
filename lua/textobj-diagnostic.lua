@@ -3,6 +3,12 @@ local M = {}
 local opts
 
 local function select_diagnostic(diagnostic)
+    local mode = vim.fn.mode():lower()
+
+    if mode == "v" or mode == "vs" or mode == "ctrl-v" or mode == "ctrl-vs" then
+        vim.cmd("normal! v")
+    end
+
     vim.fn.setcursorcharpos(diagnostic.lnum + 1, diagnostic.col + 1)
     vim.cmd("normal! v")
     vim.fn.setcursorcharpos(diagnostic.end_lnum + 1, diagnostic.end_col)
@@ -77,26 +83,17 @@ M.setup = function(o)
         vim.tbl_deep_extend("force", { create_default_keymaps = true }, o or {})
 
     if opts.create_default_keymaps then
-        vim.keymap.set(
-            { "x", "o" },
-            "ig",
-            ":<C-U>lua require('textobj-diagnostic').next_diag_inclusive()<CR>",
-            { silent = true }
-        )
+        vim.keymap.set({ "x", "o" }, "ig", function()
+            require("textobj-diagnostic").next_diag_inclusive()
+        end, { silent = true })
 
-        vim.keymap.set(
-            { "x", "o" },
-            "]g",
-            ":<C-U>lua require('textobj-diagnostic').next_diag()<CR>",
-            { silent = true }
-        )
+        vim.keymap.set({ "x", "o" }, "]g", function()
+            require("textobj-diagnostic").next_diag()
+        end, { silent = true })
 
-        vim.keymap.set(
-            { "x", "o" },
-            "[g",
-            ":<C-U>lua require('textobj-diagnostic').prev_diag()<CR>",
-            { silent = true }
-        )
+        vim.keymap.set({ "x", "o" }, "[g", function()
+            require("textobj-diagnostic").prev_diag()
+        end, { silent = true })
     end
 end
 

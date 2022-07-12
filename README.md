@@ -67,16 +67,14 @@ use({
 })
 ```
 
-Then, you can map your own. (**IMPORTANT NOTE**: For now, this has to be done as Lua embedded in VimL. [I'm investigating
-why](https://github.com/andrewferrier/textobj-diagnostic.nvim/issues/4)). For example, to create a keymapping for the
-diagnostic item under the cursor (or the next one) of `id`:
+Then, you can map your own. (note: the previous restrictions around using VimL
+here rather than Lua have been resolved). For example, to create a keymapping
+for the diagnostic item under the cursor (or the next one) of `id`:
 
 ```lua
-vim.keymap.set(
-    { "x", "o" },
-    "id",
-    ":<C-U>lua require('textobj-diagnostic').next_diag_inclusive()<CR>",
-    { silent = true }
+vim.keymap.set({ "x", "o" }, "id", function()
+    require("textobj-diagnostic").next_diag_inclusive()
+end, { silent = true })
 )
 ```
 
@@ -84,12 +82,9 @@ To map to the next diagnostic item after the cursor (excluding where the cursor
 is):
 
 ```lua
-vim.keymap.set(
-    { "x", "o" },
-    "]d",
-    ":<C-U>lua require('textobj-diagnostic').next_diag()<CR>",
-    { silent = true }
-)
+vim.keymap.set({ "x", "o" }, "]d", function()
+    require("textobj-diagnostic").next_diag()
+end, { silent = true })
 ```
 
 Any key/value you pass into the first parameter of `next_diag_inclusive` or any
@@ -99,18 +94,13 @@ which means it can be used to control the namespace or severity of the errors
 being selected. For example:
 
 ```lua
-vim.keymap.set(
-    { "x", "o" },
-    "ig",
-    ":<C-U>lua require('textobj-diagnostic').next_diag_inclusive({ severity = { "
-        .. "min = vim.diagnostic.severity.WARN, "
-        .. "max = vim.diagnostic.severity.ERROR }})<CR>",
-    { silent = true }
+vim.keymap.set({ "x", "o" }, "ig", function()
+    require("textobj-diagnostic").next_diag_inclusive({
+        severity = {
+            min = vim.diagnostic.severity.WARN,
+            max = vim.diagnostic.severity.ERROR,
+        },
+    })
+end, { silent = true })
 )
 ```
-
-## Limitations
-
-Note that for now you have to use a VimL callout to Lua in your custom keymaps
-in order for visual selection to work. [I'm investigating
-why](https://github.com/andrewferrier/textobj-diagnostic.nvim/issues/4).

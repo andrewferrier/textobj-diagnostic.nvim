@@ -140,14 +140,14 @@ describe("limit severity", function()
     before_each(function()
         require("textobj-diagnostic").setup({ create_default_keymaps = false })
 
-        vim.keymap.set(
-            { "x", "o" },
-            "ig",
-            ":<C-U>lua require('textobj-diagnostic').next_diag_inclusive({ severity = { "
-                .. "min = vim.diagnostic.severity.WARN, "
-                .. "max = vim.diagnostic.severity.ERROR }})<CR>",
-            { silent = true }
-        )
+        vim.keymap.set({ "x", "o" }, "ig", function()
+            require("textobj-diagnostic").next_diag_inclusive({
+                severity = {
+                    min = vim.diagnostic.severity.WARN,
+                    max = vim.diagnostic.severity.ERROR,
+                },
+            })
+        end, { silent = true })
 
         set_lines({
             "test1",
