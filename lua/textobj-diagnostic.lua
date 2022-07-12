@@ -46,16 +46,16 @@ _G.diagnostic_textobj = function(local_opts)
     select_diagnostic(closest_so_far)
 end
 
-M.next_diag = function()
-    local next = vim.diagnostic.get_next()
+M.next_diag = function(local_opts)
+    local next = vim.diagnostic.get_next(local_opts)
 
     if next ~= nil then
         select_diagnostic(next)
     end
 end
 
-M.prev_diag = function()
-    local prev = vim.diagnostic.get_prev()
+M.prev_diag = function(local_opts)
+    local prev = vim.diagnostic.get_prev(local_opts)
 
     if prev ~= nil then
         select_diagnostic(prev)
