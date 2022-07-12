@@ -2,7 +2,7 @@ local M = {}
 
 local opts
 
-_G.diagnostic_textobj = function(local_opts)
+M.diagnostic_textobj = function(local_opts)
     local diagnostics = vim.diagnostic.get(0, local_opts or {})
 
     if vim.tbl_count(diagnostics) == 0 then
@@ -51,7 +51,9 @@ M.setup = function(o)
             vim.keymap.set(
                 mode,
                 "ig",
-                ":<C-U>lua _G.diagnostic_textobj()<CR>",
+                function()
+                    M.diagnostic_textobj(opts)
+                end,
                 { silent = true }
             )
         end
