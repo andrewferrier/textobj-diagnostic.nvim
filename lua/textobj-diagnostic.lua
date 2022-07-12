@@ -2,6 +2,12 @@ local M = {}
 
 local opts
 
+local function selectDiagnostic(diagnostic)
+	vim.fn.setcursorcharpos(diagnostic.lnum + 1, diagnostic.col + 1)
+	vim.cmd("normal! v")
+	vim.fn.setcursorcharpos(diagnostic.end_lnum + 1, diagnostic.end_col)
+end
+
 _G.diagnostic_textobj = function(local_opts)
     local diagnostics = vim.diagnostic.get(0, local_opts or {})
 
@@ -37,9 +43,21 @@ _G.diagnostic_textobj = function(local_opts)
         closest_so_far = diagnostics[1]
     end
 
-    vim.fn.setcursorcharpos(closest_so_far.lnum + 1, closest_so_far.col + 1)
-    vim.cmd('normal! v')
-    vim.fn.setcursorcharpos(closest_so_far.end_lnum + 1, closest_so_far.end_col)
+	selectDiagnostic(closest_so_far)
+end
+
+M.next_diag = function()
+	local next = vim.diagnostic.get_next()
+	if next ~= nil then
+		selectDiagnostic(next)
+	end
+end
+
+M.prev_diag = function()
+	local prev = vim.diagnostic.get_prev()
+	if prev ~= nil then
+		selectDiagnostic(prev)
+	end
 end
 
 M.setup = function(o)
@@ -51,6 +69,18 @@ M.setup = function(o)
             { "x", "o" },
             "ig",
             ":<C-U>lua _G.diagnostic_textobj()<CR>",
+            { silent = true }
+        ) 
+        vim.keymap.set(
+            { "x", "o" },
+            "]g",
+            ":<C-U>lua require('textobj-diagnostic').next_diag()<CR>",
+            { silent = true }
+        ) 
+        vim.keymap.set(
+            { "x", "o" },
+            "[g",
+            ":<C-U>lua require('textobj-diagnostic').prev_diag()<CR>",
             { silent = true }
         )
     end
