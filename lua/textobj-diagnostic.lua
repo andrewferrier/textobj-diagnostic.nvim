@@ -38,7 +38,7 @@ _G.diagnostic_textobj = function(local_opts)
     end
 
     vim.fn.setcursorcharpos(closest_so_far.lnum + 1, closest_so_far.col + 1)
-    vim.cmd('normal! v')
+    vim.cmd("normal! v")
     vim.fn.setcursorcharpos(closest_so_far.end_lnum + 1, closest_so_far.end_col)
 end
 
