@@ -47,16 +47,14 @@ M.setup = function(o)
         vim.tbl_deep_extend("force", { create_default_keymaps = true }, o or {})
 
     if opts.create_default_keymaps then
-        for _, mode in ipairs({ "x", "o" }) do
-            vim.keymap.set(
-                mode,
-                "ig",
-                function()
-                    M.diagnostic_textobj(opts)
-                end,
-                { silent = true }
-            )
-        end
+        vim.keymap.set(
+            { "o", "x" },
+            "ig",
+            function()
+                M.diagnostic_textobj(opts)
+            end,
+            { silent = true }
+        )
     end
 end
 
