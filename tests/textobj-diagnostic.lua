@@ -43,6 +43,18 @@ describe("out-of-the-box keymappings", function()
         })
     end)
 
+    it("can change simple diagnostic", function()
+        vim.fn.cursor({ 1, 1 })
+        vim.cmd("normal cighello")
+        check_lines({
+            "test1",
+            "hello",
+            "test3",
+            "test4",
+            "test5",
+        })
+    end)
+
     it("can delete simple diagnostic", function()
         vim.fn.cursor({ 1, 1 })
         vim.cmd("normal dig")
@@ -88,6 +100,58 @@ describe("out-of-the-box keymappings", function()
             "test3",
             "test4",
             "test5",
+        })
+    end)
+end)
+
+describe("limit severity", function()
+    before_each(function()
+        require("textobj-diagnostic").setup({ create_default_keymaps = false })
+
+        vim.keymap.set(
+            { "x", "o" },
+            "ig",
+            ":<C-U>lua require('textobj-diagnostic').next_diag_inclusive({ severity = { "
+                .. "min = vim.diagnostic.severity.WARN, "
+                .. "max = vim.diagnostic.severity.ERROR }})<CR>",
+            { silent = true }
+        )
+
+        set_lines({
+            "test1",
+            "test2",
+            "test3",
+        })
+
+        vim.diagnostic.set(TEST_NAMESPACE, 0, {
+            {
+                bufnr = BUFFER_NUMBER,
+                lnum = 1,
+                end_lnum = 1,
+                col = 0,
+                end_col = 5,
+                severity = vim.diagnostic.severity.HINT,
+                message = "test2 failed",
+            },
+            {
+                bufnr = BUFFER_NUMBER,
+                lnum = 2,
+                end_lnum = 2,
+                col = 0,
+                end_col = 5,
+                severity = vim.diagnostic.severity.ERROR,
+                message = "test3 failed",
+            },
+        })
+    end)
+
+    it("can delete simple diagnostic", function()
+        vim.fn.cursor({ 1, 1 })
+        vim.cmd("normal dig")
+        check_lines({
+            "test1",
+            "test2",
+            "",
         })
     end)
 end)
