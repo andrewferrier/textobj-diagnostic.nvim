@@ -6,6 +6,10 @@ This NeoVim plugin provides a standard Vim text object for NeoVim diagnostics
 the user to type commands like `cig` to jump to the next diagnostic,
 delete the highlighted text, and enter insert mode.
 
+## Demo
+
+![](demos/demo1.mkv)
+
 ## Installation
 
 **Requires NeoVim 0.7+.**
