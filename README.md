@@ -59,14 +59,7 @@ Then, you can map your own. For example, to change the keymapping to `id`:
 local td = require("textobj-diagnostic")
 
 vim.keymap.set(
-    "x",
-    "id",
-    ":<C-U>lua _G.diagnostic_textobj()<CR>",
-    { silent = true }
-)
-
-vim.keymap.set(
-    "o",
+    { "x", "o" },
     "id",
     ":<C-U>lua _G.diagnostic_textobj()<CR>",
     { silent = true }
@@ -83,16 +76,7 @@ being selected. For example:
 local td = require("textobj-diagnostic")
 
 vim.keymap.set(
-    "x",
-    "ig",
-    ":<C-U>lua _G.diagnostic_textobj({ severity = { "
-        .. "min = vim.diagnostic.severity.WARN, "
-        .. "max = vim.diagnostic.severity.ERROR }})<CR>",
-    { silent = true }
-)
-
-vim.keymap.set(
-    "o",
+    { "x", "o" },
     "ig",
     ":<C-U>lua _G.diagnostic_textobj({ severity = { "
         .. "min = vim.diagnostic.severity.WARN, "

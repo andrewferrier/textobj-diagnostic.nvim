@@ -47,14 +47,12 @@ M.setup = function(o)
         vim.tbl_deep_extend("force", { create_default_keymaps = true }, o or {})
 
     if opts.create_default_keymaps then
-        for _, mode in ipairs({ "x", "o" }) do
-            vim.keymap.set(
-                mode,
-                "ig",
-                ":<C-U>lua _G.diagnostic_textobj()<CR>",
-                { silent = true }
-            )
-        end
+        vim.keymap.set(
+            { "x", "o" },
+            "ig",
+            ":<C-U>lua _G.diagnostic_textobj()<CR>",
+            { silent = true }
+        )
     end
 end
 
