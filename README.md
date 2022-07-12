@@ -34,15 +34,18 @@ end)
 ## Mappings
 
 By default, the keymapping `ig` is defined as an operator-pending and visual
-keymapping for the next diagnostic after the cursor position. Examples of use:
+keymapping for the diagnostic item under the cursor position (or the next one),
+`]g` finds the next diagnostic item after the cursor (excluding any item the
+cursor is on), and `[g` searches for the previous diagnostic before the cursor
+position. Examples of use:
 
-*   `cig` - jump to the next diagnostic and CHANGE it (delete the text and enter
-    insert mode)
+*   `cig` - jump to the next diagnostic (or the one under the cursor) and CHANGE
+    it (delete the text and enter insert mode)
 
-*   `vig` - visually select the next diagnostic
+*   `v[g` - visually select the previous diagnostic
 
-If you don't like this keymapping, or want to control which diagnostics are
-selected, you can disable the default keymapping:
+If you don't like these keymappings, or want to control which diagnostics are
+selected, you can disable the default keymappings:
 
 ```lua
 use({
@@ -53,7 +56,8 @@ use({
 })
 ```
 
-Then, you can map your own. For example, to change the keymapping to `id`:
+Then, you can map your own. For example, to create a keymapping for the
+diagnostic item under the cursor (or the next one) of `id`:
 
 ```lua
 local td = require("textobj-diagnostic")
@@ -66,8 +70,24 @@ vim.keymap.set(
 )
 ```
 
-Any key/value you pass into the second parameter of `diagnostic_textobj` is
-passed to
+To map to the next diagnostic item after the cursor (excluding where the cursor
+is):
+
+```lua
+local td = require("textobj-diagnostic")
+
+vim.keymap.set(
+    { "x", "o" },
+    "]d",
+    ":<C-U>lua require('textobj-diagnostic').next_diag()<CR>",
+    { silent = true }
+)
+```
+
+(previous diagnostic item is `require('textobj-diagnostic').prev_diag()`)
+
+Any key/value you pass into the first parameter of `diagnostic_textobj` or any
+of the other functions is passed to
 [`vim.diagnostic.get`](https://neovim.io/doc/user/diagnostic.html#vim.diagnostic.get\(\)),
 which means it can be used to control the namespace or severity of the errors
 being selected. For example:
@@ -90,8 +110,3 @@ vim.keymap.set(
 Note that for now you have to use a VimL callout to Lua in your custom keymaps
 in order for visual selection to work. [I'm investigating
 why](https://github.com/andrewferrier/textobj-diagnostic.nvim/issues/4).
-
-For now, this plugin only supports finding the *next* diagnostic after the
-cursor position. If there is interest in extending this capability to find
-*previous* diagnostics (i.e. searching backwards), please [open an
-issue](https://github.com/andrewferrier/textobj-diagnostic.nvim/issues/new).
