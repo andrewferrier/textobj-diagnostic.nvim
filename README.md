@@ -33,11 +33,15 @@ end)
 
 ## Mappings
 
-By default, the keymapping `ig` is defined as an operator-pending and visual
-keymapping for the diagnostic item under the cursor position (or the next one),
-`]g` finds the next diagnostic item after the cursor (excluding any item the
-cursor is on), and `[g` searches for the previous diagnostic before the cursor
-position. Examples of use:
+By default, the following keymappings are defined in the operator-pending and visual modes:
+
+| keymapping | function                                              | purpose                                                                                            |
+| -          | -                                                     | -                                                                                                  |
+| `ig`       | `require('textobj-diagnostic').next_diag_inclusive()` | finds the diagnostic under or after the cursor (including any diagnostic the cursor is sitting on) |
+| `]g`       | `require('textobj-diagnostic').next_diag()`           | finds the diagnostic after the cursor (excluding any diagnostic the cursor is sitting on)          |
+| `[g`       | `require('textobj-diagnostic').prev_diag()`           | finds the diagnostic before the cursor (excluding any diagnostic the cursor is sitting on)         |
+
+Examples of use:
 
 *   `cig` - jump to the next diagnostic (or the one under the cursor) and CHANGE
     it (delete the text and enter insert mode)
@@ -87,8 +91,6 @@ vim.keymap.set(
     { silent = true }
 )
 ```
-
-(previous diagnostic item is `require('textobj-diagnostic').prev_diag()`)
 
 Any key/value you pass into the first parameter of `next_diag_inclusive` or any
 of the other functions is passed to
