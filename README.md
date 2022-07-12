@@ -75,7 +75,6 @@ for the diagnostic item under the cursor (or the next one) of `id`:
 vim.keymap.set({ "x", "o" }, "id", function()
     require("textobj-diagnostic").next_diag_inclusive()
 end, { silent = true })
-)
 ```
 
 To map to the next diagnostic item after the cursor (excluding where the cursor
@@ -102,5 +101,4 @@ vim.keymap.set({ "x", "o" }, "ig", function()
         },
     })
 end, { silent = true })
-)
 ```
