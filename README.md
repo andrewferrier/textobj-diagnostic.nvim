@@ -44,6 +44,9 @@ position. Examples of use:
 
 *   `v[g` - visually select the previous diagnostic
 
+*   `d]g` - delete the next diagnostic text (excluding any diagnostic under the
+    cursor)
+
 If you don't like these keymappings, or want to control which diagnostics are
 selected, you can disable the default keymappings:
 
