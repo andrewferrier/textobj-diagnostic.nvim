@@ -44,6 +44,7 @@ describe("out-of-the-box keymappings", function()
     end)
 
     it("can change simple diagnostic", function()
+    it("can change diagnostic", function()
         vim.fn.cursor({ 1, 1 })
         vim.cmd("normal cighello")
         check_lines({
@@ -55,7 +56,7 @@ describe("out-of-the-box keymappings", function()
         })
     end)
 
-    it("can delete simple diagnostic", function()
+    it("can delete diagnostic", function()
         vim.fn.cursor({ 1, 1 })
         vim.cmd("normal dig")
         check_lines({
