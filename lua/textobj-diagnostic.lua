@@ -9,6 +9,16 @@ local function select_diagnostic(diagnostic)
 end
 
 _G.diagnostic_textobj = function(local_opts)
+    vim.notify(
+        "_G.diagnostic_textobj() is deprecated, "
+            .. "please use require('textobj-diagnostic').next_diag_inclusive() instead.",
+        vim.log.levels.WARN
+    )
+
+    M.next_diag_inclusive(local_opts)
+end
+
+M.next_diag_inclusive = function(local_opts)
     local diagnostics = vim.diagnostic.get(0, local_opts or {})
 
     if vim.tbl_count(diagnostics) == 0 then
@@ -70,7 +80,7 @@ M.setup = function(o)
         vim.keymap.set(
             { "x", "o" },
             "ig",
-            ":<C-U>lua _G.diagnostic_textobj()<CR>",
+            ":<C-U>lua require('textobj-diagnostic').next_diag_inclusive()<CR>",
             { silent = true }
         )
 

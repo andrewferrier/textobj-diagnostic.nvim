@@ -68,7 +68,7 @@ local td = require("textobj-diagnostic")
 vim.keymap.set(
     { "x", "o" },
     "id",
-    ":<C-U>lua _G.diagnostic_textobj()<CR>",
+    ":<C-U>lua require('textobj-diagnostic').next_diag_inclusive()<CR>",
     { silent = true }
 )
 ```
@@ -101,7 +101,7 @@ local td = require("textobj-diagnostic")
 vim.keymap.set(
     { "x", "o" },
     "ig",
-    ":<C-U>lua _G.diagnostic_textobj({ severity = { "
+    ":<C-U>lua require('textobj-diagnostic').next_diag_inclusive({ severity = { "
         .. "min = vim.diagnostic.severity.WARN, "
         .. "max = vim.diagnostic.severity.ERROR }})<CR>",
     { silent = true }
