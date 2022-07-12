@@ -8,7 +8,7 @@ delete the highlighted text, and enter insert mode.
 
 ## Demo
 
-![](demos/demo1.mkv)
+<video src="demos/demo1.mkv" width='100%'></video>
 
 ## Installation
 
