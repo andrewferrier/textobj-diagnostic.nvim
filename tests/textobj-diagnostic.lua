@@ -54,11 +54,80 @@ describe("out-of-the-box keymappings", function()
                 severity = vim.diagnostic.severity.ERROR,
                 message = "test3 failed",
             },
+            {
+                bufnr = BUFFER_NUMBER,
+                lnum = 3,
+                end_lnum = 3,
+                col = 1,
+                end_col = 4,
+                severity = vim.diagnostic.severity.ERROR,
+                message = "test4 failed",
+            },
         })
     end)
 
     it("can change diagnostic", function()
         vim.api.nvim_win_set_cursor(0, { 1, 0 })
+        vim.cmd("normal cighello")
+        check_lines({
+            "test1",
+            "hello",
+            "test3",
+            "test4",
+            "test5",
+        })
+    end)
+
+    it("can change diagnostic when sitting at the end", function()
+        vim.api.nvim_win_set_cursor(0, { 1, 4 })
+        vim.cmd("normal cighello")
+        check_lines({
+            "test1",
+            "hello",
+            "test3",
+            "test4",
+            "test5",
+        })
+    end)
+
+    it("can accurately change diagnostic not covering whole line, col = ^", function()
+        vim.api.nvim_win_set_cursor(0, { 4, 1 })
+        vim.cmd("normal cighello")
+        check_lines({
+            "test1",
+            "test2",
+            "test3",
+            "thello4",
+            "test5",
+        })
+    end)
+
+    it("can accurately change diagnostic not covering whole line, col = beg", function()
+        vim.api.nvim_win_set_cursor(0, { 4, 2 })
+        vim.cmd("normal cighello")
+        check_lines({
+            "test1",
+            "test2",
+            "test3",
+            "thello4",
+            "test5",
+        })
+    end)
+
+    it("can accurately change diagnostic not covering whole line, col = end", function()
+        vim.api.nvim_win_set_cursor(0, { 4, 3 })
+        vim.cmd("normal cighello")
+        check_lines({
+            "test1",
+            "test2",
+            "test3",
+            "thello4",
+            "test5",
+        })
+    end)
+
+    it("can accurately change first diagnostic not covering whole line, col = $", function()
+        vim.api.nvim_win_set_cursor(0, { 4, 4 })
         vim.cmd("normal cighello")
         check_lines({
             "test1",
