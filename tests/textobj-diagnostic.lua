@@ -45,7 +45,7 @@ describe("out-of-the-box keymappings", function()
 
     it("can change simple diagnostic", function()
     it("can change diagnostic", function()
-        vim.fn.cursor({ 1, 1 })
+        vim.api.nvim_win_set_cursor(0, { 1, 0 })
         vim.cmd("normal cighello")
         check_lines({
             "test1",
@@ -57,7 +57,7 @@ describe("out-of-the-box keymappings", function()
     end)
 
     it("can delete diagnostic", function()
-        vim.fn.cursor({ 1, 1 })
+        vim.api.nvim_win_set_cursor(0, { 1, 1 })
         vim.cmd("normal dig")
         check_lines({
             "test1",
@@ -69,7 +69,7 @@ describe("out-of-the-box keymappings", function()
     end)
 
     it("can delete diagnostic when sitting on it", function()
-        vim.fn.cursor({ 2, 1 })
+        vim.api.nvim_win_set_cursor(0, { 2, 0 })
         vim.cmd("normal dig")
         check_lines({
             "test1",
@@ -81,7 +81,7 @@ describe("out-of-the-box keymappings", function()
     end)
 
     it("can delete next diagnostic when sitting on another", function()
-        vim.fn.cursor({ 2, 1 })
+        vim.api.nvim_win_set_cursor(0, { 2, 0 })
         vim.cmd("normal d]g")
         check_lines({
             "test1",
@@ -93,7 +93,7 @@ describe("out-of-the-box keymappings", function()
     end)
 
     it("can delete prev diagnostic when sitting on another", function()
-        vim.fn.cursor({ 3, 1 })
+        vim.api.nvim_win_set_cursor(0, { 3, 0 })
         vim.cmd("normal d[g")
         check_lines({
             "test1",
@@ -147,7 +147,7 @@ describe("limit severity", function()
     end)
 
     it("can delete simple diagnostic", function()
-        vim.fn.cursor({ 1, 1 })
+        vim.api.nvim_win_set_cursor(0, { 1, 0 })
         vim.cmd("normal dig")
         check_lines({
             "test1",
