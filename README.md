@@ -89,7 +89,7 @@ vim.keymap.set(
 
 (previous diagnostic item is `require('textobj-diagnostic').prev_diag()`)
 
-Any key/value you pass into the first parameter of `diagnostic_textobj` or any
+Any key/value you pass into the first parameter of `next_diag_inclusive` or any
 of the other functions is passed to
 [`vim.diagnostic.get`](https://neovim.io/doc/user/diagnostic.html#vim.diagnostic.get\(\)),
 which means it can be used to control the namespace or severity of the errors
