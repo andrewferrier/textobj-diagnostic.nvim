@@ -23,7 +23,6 @@ end
 local TEST_NAMESPACE = 1
 local BUFFER_NUMBER = 0
 
-
 describe("out-of-the-box keymappings", function()
     before_each(function()
         require("textobj-diagnostic").setup({})
@@ -66,10 +65,6 @@ describe("out-of-the-box keymappings", function()
             },
         })
     end)
-
-    vim.keymap.set({ "x", "o" }, "ng", function()
-        require("textobj-diagnostic").nearest_diag()
-    end, { silent = true })
 
     it("can change diagnostic", function()
         vim.api.nvim_win_set_cursor(0, { 1, 0 })
@@ -288,6 +283,10 @@ describe("nearest diagnostics", function()
     before_each(function()
         require("textobj-diagnostic").setup({})
 
+        vim.keymap.set({ "x", "o" }, "ng", function()
+            require("textobj-diagnostic").nearest_diag()
+        end, { silent = true })
+
         set_lines({
             "test1",
             "test2",
@@ -343,10 +342,6 @@ describe("nearest diagnostics", function()
             },
         })
     end)
-
-    vim.keymap.set({ "x", "o" }, "ng", function()
-        require("textobj-diagnostic").nearest_diag()
-    end, { silent = true })
 
     it("can change nearest diagnostic - row 1", function()
         vim.api.nvim_win_set_cursor(0, { 1, 0 })
