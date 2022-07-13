@@ -62,35 +62,6 @@ M.next_diag_inclusive = function(local_opts)
     select_diagnostic(closest_so_far)
 end
 
-M.nearest_diag = function()
-    local cursor = vim.api.nvim_win_get_cursor(0)
-    local current_line = cursor[1] - 1
-    local current_column = cursor[2]
-
-    local next = vim.diagnostic.get_next({ cursor_position = { current_line, current_column } })
-    local prev = vim.diagnostic.get_prev({ cursor_position = { current_line, current_column } })
-    local select_nearest = function()
-        if next == prev then
-            return next
-        end
-
-        if math.abs(next.lnum - current_line) == math.abs(prev.lnum - current_line) then
-            if math.abs(next.col - current_column) < math.abs(prev.col - current_column) then
-                return next
-            end
-        elseif math.abs(next.lnum - current_line) < math.abs(prev.lnum - current_line) then
-            return next
-        end
-        return prev
-    end
-
-    local closest = select_nearest()
-
-    if closest ~= nil then
-        select_diagnostic(closest)
-    end
-end
-
 M.next_diag = function(local_opts)
     local next = vim.diagnostic.get_next(local_opts)
 
@@ -113,19 +84,15 @@ M.setup = function(o)
 
     if opts.create_default_keymaps then
         vim.keymap.set({ "x", "o" }, "ig", function()
-            M.next_diag_inclusive()
-        end, { silent = true })
-
-        vim.keymap.set({ "x", "o" }, "ng", function()
-            M.nearest_diag()
+            require("textobj-diagnostic").next_diag_inclusive()
         end, { silent = true })
 
         vim.keymap.set({ "x", "o" }, "]g", function()
-            M.next_diag()
+            require("textobj-diagnostic").next_diag()
         end, { silent = true })
 
         vim.keymap.set({ "x", "o" }, "[g", function()
-            M.prev_diag()
+            require("textobj-diagnostic").prev_diag()
         end, { silent = true })
     end
 end
