@@ -5,7 +5,7 @@ local opts
 local function select_diagnostic(diagnostic)
     local mode = vim.fn.mode():lower()
 
-    if mode == "v" or mode == "vs" or mode == "ctrl-v" or mode == "ctrl-vs" then
+    if mode:find("^v") or mode:find("^ctrl-v") then
         vim.cmd("normal! v")
     end
 
