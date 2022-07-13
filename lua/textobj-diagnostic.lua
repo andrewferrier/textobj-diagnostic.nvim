@@ -70,32 +70,32 @@ M.nearest_diag = function(local_opts)
     local current_column = cursor[2]
     local ext_opts = local_opts or {}
     local next = vim.diagnostic.get_next(ext_opts)
+
     if next == nil then
         return
     end
+
     ext_opts.cursor_position = { next.lnum + 1, next.col }
+
     local prev = vim.diagnostic.get_prev(ext_opts)
-    local select_nearest = function()
+    local select_nearest = prev
+
+    if
+        math.abs(next.lnum - current_line) == math.abs(prev.lnum - current_line)
+    then
         if
-            math.abs(next.lnum - current_line)
-            == math.abs(prev.lnum - current_line)
+            math.abs(next.col - current_column)
+            < math.abs(prev.col - current_column)
         then
-            if
-                math.abs(next.col - current_column)
-                < math.abs(prev.col - current_column)
-            then
-                return next
-            end
-        elseif
-            math.abs(next.lnum - current_line)
-            < math.abs(prev.lnum - current_line)
-        then
-            return next
+            select_nearest = next
         end
-        return prev
+    elseif
+        math.abs(next.lnum - current_line) < math.abs(prev.lnum - current_line)
+    then
+        select_nearest = next
     end
 
-    select_diagnostic(select_nearest())
+    select_diagnostic(select_nearest)
 end
 
 M.next_diag = function(local_opts)
