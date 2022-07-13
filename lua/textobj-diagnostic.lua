@@ -3,15 +3,17 @@ local M = {}
 local opts
 
 local function select_diagnostic(diagnostic)
-    local mode = vim.fn.mode():lower()
+    if diagnostic ~= nil then
+        local mode = vim.fn.mode():lower()
 
-    if mode:find("^v") or mode:find("^ctrl-v") then
+        if mode:find("^v") or mode:find("^ctrl-v") then
+            vim.cmd("normal! v")
+        end
+
+        vim.fn.setcursorcharpos(diagnostic.lnum + 1, diagnostic.col + 1)
         vim.cmd("normal! v")
+        vim.fn.setcursorcharpos(diagnostic.end_lnum + 1, diagnostic.end_col)
     end
-
-    vim.fn.setcursorcharpos(diagnostic.lnum + 1, diagnostic.col + 1)
-    vim.cmd("normal! v")
-    vim.fn.setcursorcharpos(diagnostic.end_lnum + 1, diagnostic.end_col)
 end
 
 _G.diagnostic_textobj = function(local_opts)
@@ -74,37 +76,34 @@ M.nearest_diag = function(local_opts)
     ext_opts.cursor_position = { next.lnum + 1, next.col }
     local prev = vim.diagnostic.get_prev(ext_opts)
     local select_nearest = function()
-        if math.abs(next.lnum - current_line) == math.abs(prev.lnum - current_line) then
-            if math.abs(next.col - current_column) < math.abs(prev.col - current_column) then
+        if
+            math.abs(next.lnum - current_line)
+            == math.abs(prev.lnum - current_line)
+        then
+            if
+                math.abs(next.col - current_column)
+                < math.abs(prev.col - current_column)
+            then
                 return next
             end
-        elseif math.abs(next.lnum - current_line) < math.abs(prev.lnum - current_line) then
+        elseif
+            math.abs(next.lnum - current_line)
+            < math.abs(prev.lnum - current_line)
+        then
             return next
         end
         return prev
     end
 
-    local closest = select_nearest()
-
-    if closest ~= nil then
-        select_diagnostic(closest)
-    end
+    select_diagnostic(select_nearest())
 end
 
 M.next_diag = function(local_opts)
-    local next = vim.diagnostic.get_next(local_opts)
-
-    if next ~= nil then
-        select_diagnostic(next)
-    end
+    select_diagnostic(vim.diagnostic.get_next(local_opts))
 end
 
 M.prev_diag = function(local_opts)
-    local prev = vim.diagnostic.get_prev(local_opts)
-
-    if prev ~= nil then
-        select_diagnostic(prev)
-    end
+    select_diagnostic(vim.diagnostic.get_prev(local_opts))
 end
 
 M.setup = function(o)
