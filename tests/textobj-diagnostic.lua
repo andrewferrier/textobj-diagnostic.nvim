@@ -218,6 +218,15 @@ describe("limit severity", function()
             })
         end, { silent = true })
 
+        vim.keymap.set({ "x", "o" }, "]g", function()
+            require("textobj-diagnostic").next_diag({
+                severity = {
+                    min = vim.diagnostic.severity.WARN,
+                    max = vim.diagnostic.severity.ERROR,
+                },
+            })
+        end, { silent = true })
+
         set_lines({
             "test1",
             "test2",
@@ -246,9 +255,19 @@ describe("limit severity", function()
         })
     end)
 
-    it("can delete simple diagnostic", function()
-        vim.api.nvim_win_set_cursor(0, { 1, 0 })
+    it("can delete simple diagnostic inclusively", function()
+        vim.api.nvim_win_set_cursor(0, { 2, 0 })
         vim.cmd("normal dig")
+        check_lines({
+            "test1",
+            "test2",
+            "",
+        })
+    end)
+
+    it("can delete simple diagnostic exclusively", function()
+        vim.api.nvim_win_set_cursor(0, { 1, 0 })
+        vim.cmd("normal d]g")
         check_lines({
             "test1",
             "test2",
