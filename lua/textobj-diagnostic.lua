@@ -25,29 +25,41 @@ _G.diagnostic_textobj = function(local_opts)
 end
 
 M.next_diag_inclusive = function(local_opts)
-    local cursor = vim.api.nvim_win_get_cursor(0)
-    local current_line = cursor[1] - 1
-    local current_column = cursor[2]
+    local diagnostics = vim.diagnostic.get(0, local_opts or {})
 
-    local ext_opts = local_opts or {}
-    local next = vim.diagnostic.get_next(ext_opts)
-    if next == nil then
+    if vim.tbl_count(diagnostics) == 0 then
         return
     end
-    -- set the cursor on next diagnostic because
-    -- when sitting on a diagnostic we can't get it by get_next() or get_prev()
-    ext_opts.cursor_position = { next.lnum + 1, next.col }
-    local prev = vim.diagnostic.get_prev(ext_opts)
 
-    local closest = next
+    local current_line = vim.fn.line(".")
+    local current_column = vim.fn.getpos(".")[3]
 
-    if prev and current_line >= prev.lnum and current_line <= prev.end_lnum and current_column < prev.end_col then
-        closest = prev
+    local closest_so_far = nil
+
+    for _, v in pairs(diagnostics) do
+        if
+            (
+                closest_so_far == nil
+                or (v.lnum + 1 < closest_so_far.lnum + 1)
+                or (
+                    (v.lnum + 1 == closest_so_far.lnum + 1)
+                    and (v.col + 1 < closest_so_far.col + 1)
+                )
+            )
+            and (
+                v.lnum + 1 > current_line
+                or (v.lnum + 1 == current_line and v.end_col >= current_column)
+            )
+        then
+            closest_so_far = v
+        end
     end
 
-    if closest ~= nil then
-        select_diagnostic(closest)
+    if closest_so_far == nil then
+        closest_so_far = diagnostics[1]
     end
+
+    select_diagnostic(closest_so_far)
 end
 
 M.nearest_diag = function(local_opts)
