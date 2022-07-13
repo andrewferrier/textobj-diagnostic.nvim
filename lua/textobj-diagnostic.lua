@@ -50,18 +50,18 @@ M.next_diag_inclusive = function(local_opts)
     end
 end
 
-M.nearest_diag = function()
+M.nearest_diag = function(local_opts)
     local cursor = vim.api.nvim_win_get_cursor(0)
     local current_line = cursor[1] - 1
     local current_column = cursor[2]
-
-    local next = vim.diagnostic.get_next({ cursor_position = { current_line, current_column } })
-    local prev = vim.diagnostic.get_prev({ cursor_position = { current_line, current_column } })
+    local ext_opts = local_opts or {}
+    local next = vim.diagnostic.get_next(ext_opts)
+    if next == nil then
+        return
+    end
+    ext_opts.cursor_position = { next.lnum + 1, next.col }
+    local prev = vim.diagnostic.get_prev(ext_opts)
     local select_nearest = function()
-        if next == prev then
-            return next
-        end
-
         if math.abs(next.lnum - current_line) == math.abs(prev.lnum - current_line) then
             if math.abs(next.col - current_column) < math.abs(prev.col - current_column) then
                 return next
@@ -102,10 +102,6 @@ M.setup = function(o)
     if opts.create_default_keymaps then
         vim.keymap.set({ "x", "o" }, "ig", function()
             M.next_diag_inclusive()
-        end, { silent = true })
-
-        vim.keymap.set({ "x", "o" }, "ng", function()
-            M.nearest_diag()
         end, { silent = true })
 
         vim.keymap.set({ "x", "o" }, "]g", function()
