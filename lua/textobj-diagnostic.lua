@@ -16,22 +16,26 @@ local function select_diagnostic(diagnostic)
     end
 end
 
-local function find_first_diagnostic(diagnostics)
-    local lowest_lnum = diagnostics[1].lnum
-    local lowest_col = diagnostics[1].col
-    local diagnostic = diagnostics[1]
+local function sort_diagnostics(diagnostics)
+    local copy = vim.deepcopy(diagnostics)
 
-    for _, v in pairs(diagnostics) do
-        if v.lnum < lowest_lnum then
-            diagnostic = v
-            lowest_lnum = v.lnum
-        elseif v.col < lowest_col then
-            diagnostic = v
-            lowest_col = v.col
+    table.sort(copy, function(a, b)
+        if a.lnum < b.lnum then
+            return true
+        elseif a.lnum > b.lnum then
+            return false
+        elseif a.col < b.col then
+            return true
+        else
+            return false
         end
-    end
+    end)
 
-    return diagnostic
+    return copy
+end
+
+local function find_first_diagnostic(diagnostics)
+    return sort_diagnostics(diagnostics)[1]
 end
 
 _G.diagnostic_textobj = function(local_opts)
