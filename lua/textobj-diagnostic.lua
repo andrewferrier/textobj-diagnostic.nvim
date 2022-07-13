@@ -84,15 +84,15 @@ M.setup = function(o)
 
     if opts.create_default_keymaps then
         vim.keymap.set({ "x", "o" }, "ig", function()
-            require("textobj-diagnostic").next_diag_inclusive()
+            M.next_diag_inclusive()
         end, { silent = true })
 
         vim.keymap.set({ "x", "o" }, "]g", function()
-            require("textobj-diagnostic").next_diag()
+            M.next_diag()
         end, { silent = true })
 
         vim.keymap.set({ "x", "o" }, "[g", function()
-            require("textobj-diagnostic").prev_diag()
+            M.prev_diag()
         end, { silent = true })
     end
 end
