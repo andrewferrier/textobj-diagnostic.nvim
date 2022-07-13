@@ -37,13 +37,15 @@ end)
 
 ## Mappings
 
-By default, the following keymappings are defined in the operator-pending and visual modes:
+By default, the following keymappings are defined in the operator-pending and
+visual modes (as well as other functions not mapped to keys by default):
 
-| keymapping | function                                              | purpose                                                                                            |
-| -          | -                                                     | -                                                                                                  |
-| `ig`       | `require('textobj-diagnostic').next_diag_inclusive()` | finds the diagnostic under or after the cursor (including any diagnostic the cursor is sitting on) |
-| `]g`       | `require('textobj-diagnostic').next_diag()`           | finds the diagnostic after the cursor (excluding any diagnostic the cursor is sitting on)          |
-| `[g`       | `require('textobj-diagnostic').prev_diag()`           | finds the diagnostic before the cursor (excluding any diagnostic the cursor is sitting on)         |
+| keymapping            | function                                              | purpose                                                                                                                       |
+| -                     | -                                                     | -                                                                                                                             |
+| `ig`                  | `require('textobj-diagnostic').next_diag_inclusive()` | finds the diagnostic under or after the cursor (including any diagnostic the cursor is sitting on)                            |
+| `]g`                  | `require('textobj-diagnostic').next_diag()`           | finds the diagnostic after the cursor (excluding any diagnostic the cursor is sitting on)                                     |
+| `[g`                  | `require('textobj-diagnostic').prev_diag()`           | finds the diagnostic before the cursor (excluding any diagnostic the cursor is sitting on)                                    |
+| No mapping by default | `require('textobj-diagnostic').nearest_diag()`        | find the diagnostic nearest to the cursor, under, before, or after, taking into account both vertical and horizontal distance |
 
 Examples of use:
 
@@ -55,8 +57,8 @@ Examples of use:
 *   `d]g` - delete the next diagnostic text (excluding any diagnostic under the
     cursor)
 
-If you don't like these keymappings, or want to control which diagnostics are
-selected, you can disable the default keymappings:
+If you don't like the default keymappings in the table above, or want to limit
+which diagnostics are selected by them, you can disable the default keymappings:
 
 ```lua
 use({
@@ -86,8 +88,8 @@ vim.keymap.set({ "x", "o" }, "]d", function()
 end, { silent = true })
 ```
 
-Any key/value you pass into the first parameter of `next_diag_inclusive` or any
-of the other functions is passed to
+Any key/value you pass into the first parameter of any the other functions is
+passed to
 [`vim.diagnostic.get`](https://neovim.io/doc/user/diagnostic.html#vim.diagnostic.get\(\)),
 which means it can be used to control the namespace or severity of the errors
 being selected. For example:
