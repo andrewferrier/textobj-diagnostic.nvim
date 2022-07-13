@@ -23,6 +23,7 @@ end
 local TEST_NAMESPACE = 1
 local BUFFER_NUMBER = 0
 
+
 describe("out-of-the-box keymappings", function()
     before_each(function()
         require("textobj-diagnostic").setup({})
@@ -65,6 +66,10 @@ describe("out-of-the-box keymappings", function()
             },
         })
     end)
+
+    vim.keymap.set({ "x", "o" }, "ng", function()
+        require("textobj-diagnostic").nearest_diag()
+    end, { silent = true })
 
     it("can change diagnostic", function()
         vim.api.nvim_win_set_cursor(0, { 1, 0 })
@@ -272,6 +277,129 @@ describe("limit severity", function()
             "test1",
             "test2",
             "",
+        })
+    end)
+end)
+
+TEST_NAMESPACE = 2
+BUFFER_NUMBER = 1
+
+describe("nearest diagnostics", function()
+    before_each(function()
+        require("textobj-diagnostic").setup({})
+
+        set_lines({
+            "test1",
+            "test2",
+            "test3",
+            "testA    testB",
+        })
+
+        vim.diagnostic.set(TEST_NAMESPACE, 0, {
+            {
+                bufnr = BUFFER_NUMBER,
+                lnum = 1,
+                end_lnum = 1,
+                col = 0,
+                end_col = 5,
+                severity = vim.diagnostic.severity.ERROR,
+                message = "test2 failed",
+            },
+            {
+                bufnr = BUFFER_NUMBER,
+                lnum = 2,
+                end_lnum = 2,
+                col = 0,
+                end_col = 5,
+                severity = vim.diagnostic.severity.ERROR,
+                message = "test3 failed",
+            },
+            {
+                bufnr = BUFFER_NUMBER,
+                lnum = 3,
+                end_lnum = 3,
+                col = 1,
+                end_col = 4,
+                severity = vim.diagnostic.severity.ERROR,
+                message = "test4 failed",
+            },
+            {
+                bufnr = BUFFER_NUMBER,
+                lnum = 4,
+                end_lnum = 4,
+                col = 0,
+                end_col = 5,
+                severity = vim.diagnostic.severity.ERROR,
+                message = "testA failed",
+            },
+            {
+                bufnr = BUFFER_NUMBER,
+                lnum = 4,
+                end_lnum = 4,
+                col = 9,
+                end_col = 13,
+                severity = vim.diagnostic.severity.ERROR,
+                message = "testB failed",
+            },
+        })
+    end)
+
+    vim.keymap.set({ "x", "o" }, "ng", function()
+        require("textobj-diagnostic").nearest_diag()
+    end, { silent = true })
+
+    it("can change nearest diagnostic - row 1", function()
+        vim.api.nvim_win_set_cursor(0, { 1, 0 })
+        vim.cmd("normal cnghello")
+        check_lines({
+            "test1",
+            "hello",
+            "test3",
+            "testA    testB",
+        })
+    end)
+
+    it("can change nearest diagnostic - row 2", function()
+        vim.api.nvim_win_set_cursor(0, { 2, 0 })
+        vim.cmd("normal cnghello")
+        check_lines({
+            "test1",
+            "hello",
+            "test3",
+            "testA    testB",
+        })
+    end)
+
+    it("can change nearest diagnostic - row 3", function()
+        vim.api.nvim_win_set_cursor(0, { 3, 0 })
+        vim.cmd("normal cnghello")
+        check_lines({
+            "test1",
+            "test2",
+            "hello",
+            "testA    testB",
+        })
+    end)
+
+    it("can change nearest diagnostic - row 4, A", function()
+        vim.api.nvim_win_set_cursor(0, { 4, 0 })
+        vim.cmd("normal cnghello")
+        check_lines({
+            "test1",
+            "test2",
+            "test3",
+            "hello    testB",
+        })
+    end)
+
+    it("can change nearest diagnostic - row 4, B", function()
+        vim.api.nvim_win_set_cursor(0, { 4, 9 })
+        vim.cmd("normal cnghello")
+        check_lines({
+            "test1",
+            "test2",
+            "test3",
+            "testA    helloB",
         })
     end)
 end)
