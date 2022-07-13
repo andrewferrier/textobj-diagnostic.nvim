@@ -35,15 +35,19 @@ describe("out-of-the-box keymappings", function()
             "test5",
         })
 
+        -- These are deliberately in the reverse ('wrong') order, because
+        -- vim.diagnostic.get() doesn't always give them to us in the order they
+        -- appear in the buffer
+
         vim.diagnostic.set(TEST_NAMESPACE, 0, {
             {
                 bufnr = BUFFER_NUMBER,
-                lnum = 1,
-                end_lnum = 1,
-                col = 0,
-                end_col = 5,
+                lnum = 3,
+                end_lnum = 3,
+                col = 1,
+                end_col = 4,
                 severity = vim.diagnostic.severity.ERROR,
-                message = "test2 failed",
+                message = "test4 failed",
             },
             {
                 bufnr = BUFFER_NUMBER,
@@ -56,12 +60,12 @@ describe("out-of-the-box keymappings", function()
             },
             {
                 bufnr = BUFFER_NUMBER,
-                lnum = 3,
-                end_lnum = 3,
-                col = 1,
-                end_col = 4,
+                lnum = 1,
+                end_lnum = 1,
+                col = 0,
+                end_col = 5,
                 severity = vim.diagnostic.severity.ERROR,
-                message = "test4 failed",
+                message = "test2 failed",
             },
         })
     end)

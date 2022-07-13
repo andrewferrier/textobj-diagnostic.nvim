@@ -16,6 +16,24 @@ local function select_diagnostic(diagnostic)
     end
 end
 
+local function find_first_diagnostic(diagnostics)
+    local lowest_lnum = diagnostics[1].lnum
+    local lowest_col = diagnostics[1].col
+    local diagnostic = diagnostics[1]
+
+    for _, v in pairs(diagnostics) do
+        if v.lnum < lowest_lnum then
+            diagnostic = v
+            lowest_lnum = v.lnum
+        elseif v.col < lowest_col then
+            diagnostic = v
+            lowest_col = v.col
+        end
+    end
+
+    return diagnostic
+end
+
 _G.diagnostic_textobj = function(local_opts)
     vim.notify(
         "_G.diagnostic_textobj() is deprecated, "
@@ -58,7 +76,7 @@ M.next_diag_inclusive = function(local_opts)
     end
 
     if closest_so_far == nil then
-        closest_so_far = diagnostics[1]
+        closest_so_far = find_first_diagnostic(diagnostics)
     end
 
     select_diagnostic(closest_so_far)
