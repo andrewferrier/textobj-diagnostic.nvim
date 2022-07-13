@@ -138,9 +138,57 @@ describe("out-of-the-box keymappings", function()
         })
     end)
 
+    it("can change nearest diagnostic - row 1", function()
+        vim.api.nvim_win_set_cursor(0, { 1, 0 })
+        vim.cmd("normal cnghello")
+        check_lines({
+            "test1",
+            "hello",
+            "test3",
+            "test4",
+            "test5",
+        })
+    end)
+
+    it("can change nearest diagnostic - row 2", function()
+        vim.api.nvim_win_set_cursor(0, { 2, 0 })
+        vim.cmd("normal cnghello")
+        check_lines({
+            "test1",
+            "hello",
+            "test3",
+            "test4",
+            "test5",
+        })
+    end)
+
+    it("can change nearest diagnostic - row 3", function()
+        vim.api.nvim_win_set_cursor(0, { 3, 0 })
+        vim.cmd("normal cnghello")
+        check_lines({
+            "test1",
+            "test2",
+            "hello",
+            "test4",
+            "test5",
+        })
+    end)
+
     it("can delete diagnostic", function()
         vim.api.nvim_win_set_cursor(0, { 1, 1 })
         vim.cmd("normal dig")
+        check_lines({
+            "test1",
+            "",
+            "test3",
+            "test4",
+            "test5",
+        })
+    end)
+
+    it("can delete nearest diagnostic", function()
+        vim.api.nvim_win_set_cursor(0, { 1, 1 })
+        vim.cmd("normal dng")
         check_lines({
             "test1",
             "",
@@ -156,6 +204,18 @@ describe("out-of-the-box keymappings", function()
         check_visual(2, 0, 2, 4)
     end)
 
+    it("can visually select nearest diagnostic", function()
+        vim.api.nvim_win_set_cursor(0, { 1, 0 })
+        feedkeys("vngv")
+        check_visual(2, 0, 2, 4)
+    end)
+
+    it("can visually select nearest diagnostic when sitting on it", function()
+        vim.api.nvim_win_set_cursor(0, { 2, 0 })
+        feedkeys("vngv")
+        check_visual(2, 0, 2, 4)
+    end)
+
     it("can visually select diagnostic when sitting on it", function()
         vim.api.nvim_win_set_cursor(0, { 2, 0 })
         feedkeys("vigv")
@@ -165,6 +225,18 @@ describe("out-of-the-box keymappings", function()
     it("can delete diagnostic when sitting on it", function()
         vim.api.nvim_win_set_cursor(0, { 2, 0 })
         vim.cmd("normal dig")
+        check_lines({
+            "test1",
+            "",
+            "test3",
+            "test4",
+            "test5",
+        })
+    end)
+
+    it("can delete nearest diagnostic when sitting on it", function()
+        vim.api.nvim_win_set_cursor(0, { 2, 0 })
+        vim.cmd("normal dng")
         check_lines({
             "test1",
             "",
