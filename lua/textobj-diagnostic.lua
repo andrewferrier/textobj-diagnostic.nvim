@@ -34,10 +34,6 @@ local function sort_diagnostics(diagnostics)
     return copy
 end
 
-local function find_first_diagnostic(diagnostics)
-    return sort_diagnostics(diagnostics)[1]
-end
-
 _G.diagnostic_textobj = function(local_opts)
     vim.notify(
         "_G.diagnostic_textobj() is deprecated, "
@@ -49,7 +45,7 @@ _G.diagnostic_textobj = function(local_opts)
 end
 
 M.next_diag_inclusive = function(local_opts)
-    local diagnostics = vim.diagnostic.get(0, local_opts or {})
+    local diagnostics = sort_diagnostics(vim.diagnostic.get(0, local_opts or {}))
 
     if vim.tbl_count(diagnostics) == 0 then
         return
@@ -58,32 +54,25 @@ M.next_diag_inclusive = function(local_opts)
     local current_line = vim.fn.line(".")
     local current_column = vim.fn.getpos(".")[3]
 
-    local closest_so_far = nil
+    -- If none match, default to the first in the buffer as it means our cursor
+    -- is further out than any of the existing diagnostics, so 'wrap'.
+    local closest = diagnostics[1]
 
-    for _, v in pairs(diagnostics) do
-        if
-            (
-                closest_so_far == nil
-                or (v.lnum + 1 < closest_so_far.lnum + 1)
-                or (
-                    (v.lnum + 1 == closest_so_far.lnum + 1)
-                    and (v.col + 1 < closest_so_far.col + 1)
-                )
-            )
-            and (
-                v.lnum + 1 > current_line
-                or (v.lnum + 1 == current_line and v.end_col >= current_column)
-            )
-        then
-            closest_so_far = v
+    for i = #diagnostics, 1, -1 do
+        local v = diagnostics[i]
+
+        if v.lnum + 1 >= current_line then
+            if v.lnum + 1 == current_line then
+                if v.end_col >= current_column then
+                    closest = v
+                end
+            else
+                closest = v
+            end
         end
     end
 
-    if closest_so_far == nil then
-        closest_so_far = find_first_diagnostic(diagnostics)
-    end
-
-    select_diagnostic(closest_so_far)
+    select_diagnostic(closest)
 end
 
 M.nearest_diag = function(local_opts)
