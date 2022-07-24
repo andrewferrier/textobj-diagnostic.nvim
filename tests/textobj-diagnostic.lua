@@ -20,8 +20,8 @@ local feedkeys = function(keys)
     vim.api.nvim_feedkeys(keys, "mtx", false)
 end
 
-local TEST_NAMESPACE = 1
-local BUFFER_NUMBER = 0
+local test_namespace = vim.api.nvim_create_namespace('textobj-diagnostic-test')
+local buffer_number = 0
 
 describe("out-of-the-box keymappings", function()
     before_each(function()
@@ -39,9 +39,9 @@ describe("out-of-the-box keymappings", function()
         -- vim.diagnostic.get() doesn't always give them to us in the order they
         -- appear in the buffer
 
-        vim.diagnostic.set(TEST_NAMESPACE, 0, {
+        vim.diagnostic.set(test_namespace, buffer_number, {
             {
-                bufnr = BUFFER_NUMBER,
+                bufnr = buffer_number,
                 lnum = 3,
                 end_lnum = 3,
                 col = 1,
@@ -50,7 +50,7 @@ describe("out-of-the-box keymappings", function()
                 message = "test4 failed",
             },
             {
-                bufnr = BUFFER_NUMBER,
+                bufnr = buffer_number,
                 lnum = 2,
                 end_lnum = 2,
                 col = 0,
@@ -59,7 +59,7 @@ describe("out-of-the-box keymappings", function()
                 message = "test3 failed",
             },
             {
-                bufnr = BUFFER_NUMBER,
+                bufnr = buffer_number,
                 lnum = 1,
                 end_lnum = 1,
                 col = 0,
@@ -237,9 +237,9 @@ describe("limit severity", function()
             "test3",
         })
 
-        vim.diagnostic.set(TEST_NAMESPACE, 0, {
+        vim.diagnostic.set(test_namespace, buffer_number, {
             {
-                bufnr = BUFFER_NUMBER,
+                bufnr = buffer_number,
                 lnum = 1,
                 end_lnum = 1,
                 col = 0,
@@ -248,7 +248,7 @@ describe("limit severity", function()
                 message = "test2 failed",
             },
             {
-                bufnr = BUFFER_NUMBER,
+                bufnr = buffer_number,
                 lnum = 2,
                 end_lnum = 2,
                 col = 0,
@@ -280,11 +280,14 @@ describe("limit severity", function()
     end)
 end)
 
-TEST_NAMESPACE = 2
-BUFFER_NUMBER = 1
 
 describe("nearest diagnostics", function()
+    local test_namespace
+
     before_each(function()
+        test_namespace = vim.api.nvim_create_namespace('textobj-diagnostic-test-nearest')
+        buffer_number = 1
+
         require("textobj-diagnostic").setup({})
 
         vim.keymap.set({ "x", "o" }, "ng", function()
@@ -298,9 +301,9 @@ describe("nearest diagnostics", function()
             "testA    testB",
         })
 
-        vim.diagnostic.set(TEST_NAMESPACE, 0, {
+        vim.diagnostic.set(test_namespace, buffer_number, {
             {
-                bufnr = BUFFER_NUMBER,
+                bufnr = buffer_number,
                 lnum = 1,
                 end_lnum = 1,
                 col = 0,
@@ -309,7 +312,7 @@ describe("nearest diagnostics", function()
                 message = "test2 failed",
             },
             {
-                bufnr = BUFFER_NUMBER,
+                bufnr = buffer_number,
                 lnum = 2,
                 end_lnum = 2,
                 col = 0,
@@ -318,7 +321,7 @@ describe("nearest diagnostics", function()
                 message = "test3 failed",
             },
             {
-                bufnr = BUFFER_NUMBER,
+                bufnr = buffer_number,
                 lnum = 3,
                 end_lnum = 3,
                 col = 1,
@@ -327,7 +330,7 @@ describe("nearest diagnostics", function()
                 message = "test4 failed",
             },
             {
-                bufnr = BUFFER_NUMBER,
+                bufnr = buffer_number,
                 lnum = 4,
                 end_lnum = 4,
                 col = 0,
@@ -336,7 +339,7 @@ describe("nearest diagnostics", function()
                 message = "testA failed",
             },
             {
-                bufnr = BUFFER_NUMBER,
+                bufnr = buffer_number,
                 lnum = 4,
                 end_lnum = 4,
                 col = 9,
