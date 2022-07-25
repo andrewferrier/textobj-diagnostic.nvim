@@ -88,7 +88,7 @@ vim.keymap.set({ "x", "o" }, "]d", function()
 end, { silent = true })
 ```
 
-Any key/value you pass into the first parameter of any the other functions is
+Any key/value you pass into the first parameter of any of the functions is
 passed to
 [`vim.diagnostic.get`](https://neovim.io/doc/user/diagnostic.html#vim.diagnostic.get\(\)),
 which means it can be used to control the namespace or severity of the errors
