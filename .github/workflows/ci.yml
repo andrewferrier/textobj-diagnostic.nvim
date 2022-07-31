@@ -1,3 +1,5 @@
+name: Check conventional commits
+
 on:
   push:
     branches: [ main ]
