@@ -11,3 +11,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: webiny/action-conventional-commits@v1.0.3
+
+  stylua:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: JohnnyMorganz/stylua-action@1.0.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          args: --color always --check lua/ tests/
