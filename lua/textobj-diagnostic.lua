@@ -45,7 +45,8 @@ _G.diagnostic_textobj = function(local_opts)
 end
 
 M.next_diag_inclusive = function(local_opts)
-    local diagnostics = sort_diagnostics(vim.diagnostic.get(0, local_opts or {}))
+    local diagnostics =
+        sort_diagnostics(vim.diagnostic.get(0, local_opts or {}))
 
     if vim.tbl_count(diagnostics) == 0 then
         return

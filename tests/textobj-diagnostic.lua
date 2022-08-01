@@ -20,7 +20,7 @@ local feedkeys = function(keys)
     vim.api.nvim_feedkeys(keys, "mtx", false)
 end
 
-local test_namespace = vim.api.nvim_create_namespace('textobj-diagnostic-test')
+local test_namespace = vim.api.nvim_create_namespace("textobj-diagnostic-test")
 local buffer_number = 0
 
 describe("out-of-the-box keymappings", function()
@@ -94,53 +94,65 @@ describe("out-of-the-box keymappings", function()
         })
     end)
 
-    it("can accurately change diagnostic not covering whole line, col = ^", function()
-        vim.api.nvim_win_set_cursor(0, { 4, 1 })
-        vim.cmd("normal cighello")
-        check_lines({
-            "test1",
-            "test2",
-            "test3",
-            "thello4",
-            "test5",
-        })
-    end)
+    it(
+        "can accurately change diagnostic not covering whole line, col = ^",
+        function()
+            vim.api.nvim_win_set_cursor(0, { 4, 1 })
+            vim.cmd("normal cighello")
+            check_lines({
+                "test1",
+                "test2",
+                "test3",
+                "thello4",
+                "test5",
+            })
+        end
+    )
 
-    it("can accurately change diagnostic not covering whole line, col = beg", function()
-        vim.api.nvim_win_set_cursor(0, { 4, 2 })
-        vim.cmd("normal cighello")
-        check_lines({
-            "test1",
-            "test2",
-            "test3",
-            "thello4",
-            "test5",
-        })
-    end)
+    it(
+        "can accurately change diagnostic not covering whole line, col = beg",
+        function()
+            vim.api.nvim_win_set_cursor(0, { 4, 2 })
+            vim.cmd("normal cighello")
+            check_lines({
+                "test1",
+                "test2",
+                "test3",
+                "thello4",
+                "test5",
+            })
+        end
+    )
 
-    it("can accurately change diagnostic not covering whole line, col = end", function()
-        vim.api.nvim_win_set_cursor(0, { 4, 3 })
-        vim.cmd("normal cighello")
-        check_lines({
-            "test1",
-            "test2",
-            "test3",
-            "thello4",
-            "test5",
-        })
-    end)
+    it(
+        "can accurately change diagnostic not covering whole line, col = end",
+        function()
+            vim.api.nvim_win_set_cursor(0, { 4, 3 })
+            vim.cmd("normal cighello")
+            check_lines({
+                "test1",
+                "test2",
+                "test3",
+                "thello4",
+                "test5",
+            })
+        end
+    )
 
-    it("can accurately change first diagnostic not covering whole line, col = $", function()
-        vim.api.nvim_win_set_cursor(0, { 4, 4 })
-        vim.cmd("normal cighello")
-        check_lines({
-            "test1",
-            "hello",
-            "test3",
-            "test4",
-            "test5",
-        })
-    end)
+    it(
+        "can accurately change first diagnostic not covering whole line, col = $",
+        function()
+            vim.api.nvim_win_set_cursor(0, { 4, 4 })
+            vim.cmd("normal cighello")
+            check_lines({
+                "test1",
+                "hello",
+                "test3",
+                "test4",
+                "test5",
+            })
+        end
+    )
 
     it("can delete diagnostic", function()
         vim.api.nvim_win_set_cursor(0, { 1, 1 })
@@ -280,12 +292,12 @@ describe("limit severity", function()
     end)
 end)
 
-
 describe("nearest diagnostics", function()
     local test_namespace
 
     before_each(function()
-        test_namespace = vim.api.nvim_create_namespace('textobj-diagnostic-test-nearest')
+        test_namespace =
+            vim.api.nvim_create_namespace("textobj-diagnostic-test-nearest")
         buffer_number = 1
 
         require("textobj-diagnostic").setup({})
