@@ -417,3 +417,19 @@ describe("nearest diagnostics", function()
         })
     end)
 end)
+
+describe("broken setup", function()
+    it("accepts valid setup", function()
+        require("textobj-diagnostic").setup({
+            create_default_keymaps = false,
+        })
+    end)
+
+    it("rejects broken setup", function()
+        assert.error_matches(function()
+            require("textobj-diagnostic").setup({
+                create_default_keymaps = "bananas",
+            })
+        end, "expected boolean, got string")
+    end)
+end)

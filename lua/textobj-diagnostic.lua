@@ -119,8 +119,15 @@ M.prev_diag = function(local_opts)
 end
 
 M.setup = function(o)
-    opts =
-        vim.tbl_deep_extend("force", { create_default_keymaps = true }, o or {})
+    opts = vim.tbl_deep_extend(
+        "force",
+        { create_default_keymaps = true },
+        o or {}
+    )
+
+    vim.validate({
+        create_default_keymaps = { opts.create_default_keymaps, "boolean" },
+    })
 
     if opts.create_default_keymaps then
         vim.keymap.set({ "x", "o" }, "ig", function()
