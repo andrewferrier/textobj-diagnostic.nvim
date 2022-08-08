@@ -232,7 +232,9 @@ describe("limit severity", function()
                     max = vim.diagnostic.severity.ERROR,
                 },
             })
-        end, { silent = true })
+        end, {
+            silent = true,
+        })
 
         vim.keymap.set({ "x", "o" }, "]g", function()
             require("textobj-diagnostic").next_diag({
@@ -241,7 +243,9 @@ describe("limit severity", function()
                     max = vim.diagnostic.severity.ERROR,
                 },
             })
-        end, { silent = true })
+        end, {
+            silent = true,
+        })
 
         set_lines({
             "test1",
@@ -296,15 +300,18 @@ describe("nearest diagnostics", function()
     local test_namespace
 
     before_each(function()
-        test_namespace =
-            vim.api.nvim_create_namespace("textobj-diagnostic-test-nearest")
+        test_namespace = vim.api.nvim_create_namespace(
+            "textobj-diagnostic-test-nearest"
+        )
         buffer_number = 1
 
         require("textobj-diagnostic").setup({})
 
         vim.keymap.set({ "x", "o" }, "ng", function()
             require("textobj-diagnostic").nearest_diag()
-        end, { silent = true })
+        end, {
+            silent = true,
+        })
 
         set_lines({
             "test1",
