@@ -300,9 +300,8 @@ describe("nearest diagnostics", function()
     local test_namespace
 
     before_each(function()
-        test_namespace = vim.api.nvim_create_namespace(
-            "textobj-diagnostic-test-nearest"
-        )
+        test_namespace =
+            vim.api.nvim_create_namespace("textobj-diagnostic-test-nearest")
         buffer_number = 1
 
         require("textobj-diagnostic").setup({})
