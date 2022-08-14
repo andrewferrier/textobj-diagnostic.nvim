@@ -8,7 +8,7 @@ delete the highlighted text, and enter insert mode.
 
 ## Demo
 
-![Demo Video](demos/demo1.gif)
+![Demo Video](https://user-images.githubusercontent.com/107015/184540175-d40871db-aed7-4990-9a2f-546570cbe008.gif)
 
 ## Installation
 
