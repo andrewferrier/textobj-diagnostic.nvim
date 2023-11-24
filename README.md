@@ -1,10 +1,8 @@
 # textobj-diagnostic.nvim
 
-**⚠️  NO LONGER ACTIVELY DEVELOPED: I am no longer personally using this plugin
-and have replaced it with the diagnostic textobject from [this
-plugin](https://github.com/chrisgrieser/nvim-various-textobjs). I will willingly
-fix bugs on this plugin for now, but at some point in the future I may archive
-or deprecate it.**
+**⚠️  NO LONGER ACTIVELY DEVELOPED: This plugin is now archived; personally I have
+replaced it with [this
+plugin](https://github.com/chrisgrieser/nvim-various-textobjs).**
 
 This NeoVim plugin provides a standard Vim text object for NeoVim diagnostics
 (such as those produced by the [LSP](https://neovim.io/doc/user/lsp.html),
